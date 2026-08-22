@@ -1,29 +1,60 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Card from '../components/Card.jsx'
 import { useToast } from '../components/Toast.jsx'
+import { useProfile } from '../ProfileContext.jsx' 
 
 const LANGUAGES = ['English', 'Hindi', 'Marathi']
 
 export default function Settings() {
   const { showToast } = useToast()
+  
+  // 1. Grab global profile state
+  const { profile, setProfile } = useProfile()
+  
+  // 2. Create a temporary "draft" state just for this form
+  const [formData, setFormData] = useState(profile)
+  
   const [language, setLanguage] = useState('English')
-  const [profile, setProfile] = useState({
-    name: 'Aditya',
-    state: 'Maharashtra',
-    userType: 'Citizen',
-  })
   const [toggles, setToggles] = useState({
     largerText: false,
     highContrast: false,
     voiceInput: false,
   })
+  const [darkMode, setDarkMode] = useState(false)
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme === 'dark' || document.documentElement.getAttribute('data-theme') === 'dark') {
+      setDarkMode(true)
+      document.documentElement.setAttribute('data-theme', 'dark')
+    }
+  }, [])
+
+  const handleThemeToggle = () => {
+    const isNowDark = !darkMode
+    setDarkMode(isNowDark)
+    
+    if (isNowDark) {
+      document.documentElement.setAttribute('data-theme', 'dark')
+      localStorage.setItem('theme', 'dark')
+      showToast('Dark mode enabled')
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+      localStorage.setItem('theme', 'light')
+      showToast('Dark mode disabled')
+    }
+  }
 
   const flip = (key) => {
-    setToggles((t) => {
-      const next = { ...t, [key]: !t[key] }
-      showToast(next[key] ? 'Setting turned on' : 'Setting turned off')
-      return next
-    })
+    const isNowOn = !toggles[key]
+    setToggles({ ...toggles, [key]: isNowOn })
+    showToast(isNowOn ? 'Setting turned on' : 'Setting turned off')
+  }
+
+  // 3. NEW: The Save Button Function
+  const handleSaveProfile = () => {
+    setProfile(formData) // This pushes the draft to the global app and updates the Sidebar
+    showToast('Profile saved successfully!')
   }
 
   return (
@@ -39,11 +70,20 @@ export default function Settings() {
         <h3>Profile</h3>
         <div className="field-group">
           <label htmlFor="set-name">Name</label>
-          <input id="set-name" value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} />
+          {/* Note: We are using formData here instead of profile now */}
+          <input 
+            id="set-name" 
+            value={formData.name} 
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+          />
         </div>
         <div className="field-group">
           <label htmlFor="set-state">State</label>
-          <select id="set-state" value={profile.state} onChange={(e) => setProfile({ ...profile, state: e.target.value })}>
+          <select 
+            id="set-state" 
+            value={formData.state} 
+            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+          >
             <option>Maharashtra</option>
             <option>Uttar Pradesh</option>
             <option>Bihar</option>
@@ -52,15 +92,37 @@ export default function Settings() {
             <option>Karnataka</option>
           </select>
         </div>
-        <div className="field-group" style={{ marginBottom: 0 }}>
+        <div className="field-group">
           <label htmlFor="set-usertype">User Type</label>
-          <select id="set-usertype" value={profile.userType} onChange={(e) => setProfile({ ...profile, userType: e.target.value })}>
+          <select 
+            id="set-usertype" 
+            value={formData.userType} 
+            onChange={(e) => setFormData({ ...formData, userType: e.target.value })}
+          >
             <option>Citizen</option>
             <option>Student</option>
             <option>Farmer</option>
             <option>Worker</option>
             <option>Small Business Owner</option>
           </select>
+        </div>
+        
+        {/* NEW SAVE BUTTON */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+          <button 
+            onClick={handleSaveProfile}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: 'var(--primary, #0066cc)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontWeight: '600',
+              cursor: 'pointer'
+            }}
+          >
+            Save Changes
+          </button>
         </div>
       </Card>
 
@@ -79,6 +141,23 @@ export default function Settings() {
               {l}
             </button>
           ))}
+        </div>
+      </Card>
+
+      <Card className="settings-section">
+        <h3>Appearance</h3>
+        <div className="settings-row">
+          <div>
+            <div className="settings-row-label">Dark Mode</div>
+            <div className="settings-row-desc">Toggle between light and dark themes.</div>
+          </div>
+          <button 
+            className={`toggle ${darkMode ? 'on' : ''}`} 
+            onClick={handleThemeToggle} 
+            role="switch" 
+            aria-checked={darkMode} 
+            aria-label="Dark mode" 
+          />
         </div>
       </Card>
 
