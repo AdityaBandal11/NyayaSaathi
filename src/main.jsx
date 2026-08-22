@@ -1,13 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
-import './index.css'
+import { BrowserRouter } from 'react-router-dom'
+
+// 1. IMPORT YOUR CSS RIGHT HERE!
+import './index.css' 
+
+// 2. Import your providers
+import { ProfileProvider } from './ProfileContext.jsx' 
+import { ToastProvider } from './components/Toast.jsx' 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ToastProvider>
+      <ProfileProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ProfileProvider>
+    </ToastProvider>
   </React.StrictMode>,
 )

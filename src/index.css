@@ -7,6 +7,39 @@
    ========================================================= */
 
 :root {
+
+  /* Dark Theme Overrides */
+[data-theme="dark"] {
+  /* Backgrounds & Surfaces */
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  
+  /* Borders */
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  
+  /* Text */
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-text-faint: #64748b;
+  
+  /* Tints (darkened to prevent glare on dark backgrounds) */
+  --color-primary-tint: #1e3a8a;
+  --color-secondary-tint: #064e3b;
+  --color-amber-tint: #78350f;
+  --color-red-tint: #7f1d1d;
+
+  /* Shadows (darkened for better contrast) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* Optional: Smooth transition when toggling themes */
+body, .card, .navbar, .app-header, .sidebar {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
   /* Color */
   --color-primary: #2563eb;
   --color-primary-dark: #1d4ed8;
@@ -825,4 +858,72 @@ textarea:focus-visible,
 @media (max-width: 640px) {
   .section { padding: 56px 0; }
   .doc-result-grid, .grid-2 { grid-template-columns: 1fr; }
+}
+/* =========================================================
+   DARK THEME OVERRIDES
+   ========================================================= */
+:root[data-theme="dark"] {
+  /* Backgrounds & Surfaces */
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  
+  /* Borders */
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  
+  /* Text */
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-text-faint: #64748b;
+  
+  /* Tints (darkened to prevent glare on dark backgrounds) */
+  --color-primary-tint: #1e3a8a;
+  --color-secondary-tint: #064e3b;
+  --color-amber-tint: #78350f;
+  --color-red-tint: #7f1d1d;
+
+  /* Shadows (darkened for better contrast) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* Smooth transition when toggling themes */
+body, .card, .navbar, .app-header, .sidebar, .sidebar-profile, .search-bar, .panel-box, .msg-bubble {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+/* Fix hardcoded white backgrounds in Dark Mode */
+:root[data-theme="dark"] .btn-secondary,
+:root[data-theme="dark"] .btn-icon,
+:root[data-theme="dark"] .mobile-drawer-panel,
+:root[data-theme="dark"] .float-badge,
+:root[data-theme="dark"] .msg-row.ai .msg-bubble,
+:root[data-theme="dark"] .typing-bubble,
+:root[data-theme="dark"] .chat-input-bar textarea,
+:root[data-theme="dark"] .search-bar,
+:root[data-theme="dark"] .filter-select,
+:root[data-theme="dark"] .modal-box,
+:root[data-theme="dark"] .modal-header,
+:root[data-theme="dark"] .field-group input,
+:root[data-theme="dark"] .field-group select,
+:root[data-theme="dark"] .field-group textarea,
+:root[data-theme="dark"] .upload-card,
+:root[data-theme="dark"] .mobile-nav,
+:root[data-theme="dark"] .suggestion-chip,
+:root[data-theme="dark"] .lang-pill,
+:root[data-theme="dark"] .feedback-row button,
+:root[data-theme="dark"] .wizard-step-dot {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* Fix for the step timeline dots so they match the background */
+:root[data-theme="dark"] .ladder-step::before {
+  background: var(--color-bg);
+}
+/* Fix the top header frosted-glass background in Dark Mode */
+:root[data-theme="dark"] .app-header,
+:root[data-theme="dark"] .navbar {
+  /* This uses your dark background (#0f172a) at 90% opacity for the blur effect */
+  background: rgba(15, 23, 42, 0.9); 
 }
