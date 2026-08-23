@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Scale, Menu, X } from 'lucide-react'
 import Button from './Button.jsx'
+import ThemeToggle from './ThemeToggle.jsx'
 
 const NAV_ITEMS = [
   { label: 'Home', href: '#home' },
@@ -33,6 +34,7 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-actions">
+          <ThemeToggle compact />
           <Button variant="secondary" size="sm" onClick={() => navigate('/app')}>
             Ask NyayaSaathi
           </Button>

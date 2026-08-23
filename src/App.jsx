@@ -3,10 +3,12 @@ import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
 import { Menu, Bell } from 'lucide-react'
 import Sidebar from './components/Sidebar.jsx'
 import MobileNav from './components/MobileNav.jsx'
-import { ToastProvider } from './components/Toast.jsx'
-import { useProfile } from './ProfileContext.jsx' 
+import ThemeToggle from './components/ThemeToggle.jsx'
+import ProfileMenu from './components/ProfileMenu.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 import Landing from './pages/Landing.jsx'
+import Login from './pages/Login.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Assistant from './pages/Assistant.jsx'
 import Schemes from './pages/Schemes.jsx'
@@ -31,9 +33,6 @@ function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
   const title = PAGE_TITLES[location.pathname] || 'NyayaSaathi AI'
-  
-  // 2. Grab the profile data
-  const { profile } = useProfile()
 
   return (
     <div className="app-shell">
@@ -47,15 +46,11 @@ function AppLayout() {
             <span className="app-header-title">{title}</span>
           </div>
           <div className="app-header-actions">
+            <ThemeToggle compact />
             <button className="btn-icon" aria-label="Notifications">
               <Bell size={17} />
             </button>
-            
-            {/* 3. This makes the avatar letter change automatically! */}
-            <div className="avatar" style={{ width: 32, height: 32, fontSize: 12.5 }}>
-              {profile.name ? profile.name.charAt(0).toUpperCase() : 'U'}
-            </div>
-            
+            <ProfileMenu />
           </div>
         </header>
         <div className="page-content">
@@ -69,9 +64,11 @@ function AppLayout() {
 
 export default function App() {
   return (
-    <ToastProvider>
-      <Routes>
-        <Route path="/" element={<Landing />} />
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/login" element={<Login />} />
+
+      <Route element={<ProtectedRoute />}>
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="assistant" element={<Assistant />} />
@@ -82,7 +79,7 @@ export default function App() {
           <Route path="saved" element={<Saved />} />
           <Route path="settings" element={<Settings />} />
         </Route>
-      </Routes>
-    </ToastProvider>
+      </Route>
+    </Routes>
   )
 }

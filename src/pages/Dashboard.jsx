@@ -4,6 +4,7 @@ import Card from '../components/Card.jsx'
 import Button from '../components/Button.jsx'
 import StatCard from '../components/StatCard.jsx'
 import { recentActivity } from '../data/applications.js'
+import { useProfile } from '../ProfileContext.jsx'
 
 const ACTIONS = [
   {
@@ -38,11 +39,13 @@ const ACTIONS = [
 
 export default function Dashboard() {
   const navigate = useNavigate()
+  const { profile } = useProfile()
+  const firstName = (profile?.name || 'there').trim().split(/\s+/)[0]
 
   return (
     <div>
       <div className="dash-header" style={{ marginBottom: 26 }}>
-        <h1>Good morning, Aditya 👋</h1>
+        <h1>Good morning, {firstName} 👋</h1>
         <p>How can NyayaSaathi help you today?</p>
       </div>
 

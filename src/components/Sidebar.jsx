@@ -1,5 +1,5 @@
 import { useProfile } from '../ProfileContext.jsx'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Scale,
   LayoutDashboard,
@@ -26,7 +26,13 @@ const NAV_ITEMS = [
 
 export default function Sidebar({ open, onClose }) {
   // Grab the live profile from the context
-  const { profile } = useProfile()
+  const { profile, initials } = useProfile()
+  const navigate = useNavigate()
+
+  const goToProfile = () => {
+    onClose()
+    navigate('/app/settings')
+  }
 
   return (
     <>
@@ -57,17 +63,20 @@ export default function Sidebar({ open, onClose }) {
           ))}
         </nav>
 
-        <div className="sidebar-profile">
-          {/* Avatar dynamically shows the first letter of the typed name */}
-          <div className="avatar">
-            {profile.name ? profile.name.charAt(0).toUpperCase() : 'U'}
-          </div>
+        <button
+          className="sidebar-profile"
+          onClick={goToProfile}
+          style={{ textAlign: 'left', cursor: 'pointer' }}
+          aria-label="Open your profile"
+        >
+          {/* Avatar dynamically shows initials from the live profile name */}
+          <div className="avatar">{initials}</div>
           <div>
             {/* Display the live name and live role */}
             <div className="sidebar-profile-name">{profile.name}</div>
             <div className="sidebar-profile-role">{profile.userType}</div>
           </div>
-        </div>
+        </button>
       </aside>
     </>
   )

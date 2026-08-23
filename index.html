@@ -9,12 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet" />
     
-    <!-- Dark Mode Initialization Script -->
+    <!-- Dark Mode Initialization Script — runs before paint to avoid a light/dark flash.
+         Priority: saved user preference -> system preference -> light (default). -->
     <script>
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
+      (function () {
+        try {
+          var saved = localStorage.getItem('nyayaSaathiTheme') || localStorage.getItem('theme');
+          var theme = saved;
+          if (theme !== 'light' && theme !== 'dark') {
+            theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+          }
+          if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+        } catch (e) {
+          // localStorage/matchMedia unavailable — default to light mode
+        }
+      })();
     </script>
   </head>
   <body>
