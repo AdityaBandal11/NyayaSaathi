@@ -32,7 +32,7 @@ export function TypingRow() {
   )
 }
 
-export default function ChatMessage({ message }) {
+export default function ChatMessage({ message, showSources = true }) {
   const { showToast } = useToast()
   const [showDocs, setShowDocs] = useState(false)
   const [feedback, setFeedback] = useState(null)
@@ -101,14 +101,16 @@ export default function ChatMessage({ message }) {
         </div>
       )}
 
-      <div>
-        <p style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--color-text-muted)', marginBottom: 8 }}>Sources</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {sources.map((s, i) => (
-            <SourceCard key={i} org={s.org} dept={s.dept} label={s.label} />
-          ))}
+      {showSources && (
+        <div>
+          <p style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--color-text-muted)', marginBottom: 8 }}>Sources</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {sources.map((s, i) => (
+              <SourceCard key={i} org={s.org} dept={s.dept} label={s.label} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="feedback-row">
         <span>Was this helpful?</span>

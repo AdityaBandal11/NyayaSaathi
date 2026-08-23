@@ -1,7 +1,7 @@
 import { useRef } from 'react'
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, Paperclip } from 'lucide-react'
 
-export default function ChatInput({ value, onChange, onSend, disabled, placeholder }) {
+export default function ChatInput({ value, onChange, onSend, onAttach, disabled, placeholder }) {
   const taRef = useRef(null)
 
   const handleKeyDown = (e) => {
@@ -13,6 +13,14 @@ export default function ChatInput({ value, onChange, onSend, disabled, placehold
 
   return (
     <div className="chat-input-bar">
+      <button
+        type="button"
+        className="attach-btn"
+        onClick={onAttach}
+        aria-label="Attach document"
+      >
+        <Paperclip size={18} />
+      </button>
       <textarea
         ref={taRef}
         value={value}
@@ -23,6 +31,7 @@ export default function ChatInput({ value, onChange, onSend, disabled, placehold
         aria-label="Message NyayaSaathi AI"
       />
       <button
+        type="button"
         className="send-btn"
         onClick={() => value.trim() && onSend()}
         disabled={disabled || !value.trim()}

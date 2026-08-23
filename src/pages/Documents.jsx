@@ -67,8 +67,8 @@ export default function Documents() {
           <div className="upload-icon">
             <UploadCloud size={26} />
           </div>
-          <h3>Understand Your Document</h3>
-          <p>Drag and drop a file here, or choose a file from your device.</p>
+          <h3>Drop your document here</h3>
+          <p>Choose a PDF, image or government notice and NyayaSaathi will summarize the key details.</p>
           <Button onClick={() => inputRef.current.click()}>Choose File</Button>
           <input
             ref={inputRef}

@@ -74,14 +74,14 @@ export default function Landing() {
               Understand Your Rights. <span className="accent">Take the Right Action.</span>
             </h1>
             <p className="lead">
-              NyayaSaathi AI simplifies government schemes, civic rights and legal information into clear, actionable steps.
+              NyayaSaathi simplifies government schemes, civic rights and legal information into clear, actionable steps.
             </p>
             <div className="hero-actions">
               <Button icon={MessageSquareText} onClick={() => navigate('/app/assistant')}>
                 Ask NyayaSaathi
               </Button>
               <Button variant="secondary" icon={Landmark} onClick={() => navigate('/app/schemes')}>
-                Explore Government Schemes
+                Explore Schemes
               </Button>
             </div>
             <div className="trust-row">
@@ -104,7 +104,7 @@ export default function Landing() {
                   <Scale size={15} />
                 </span>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>NyayaSaathi AI</div>
+                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>AI Assistant</div>
                   <div style={{ fontSize: 11.5, color: 'var(--color-text-faint)' }}>Civic Rights Assistant</div>
                 </div>
                 <span className="ai-dot" style={{ marginLeft: 'auto' }} />

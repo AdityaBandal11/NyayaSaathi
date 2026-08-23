@@ -2,7 +2,7 @@ import { FileText, ChevronRight } from 'lucide-react'
 
 export default function DocumentCard({ name, type, date, onClick }) {
   return (
-    <button className="card doc-history-item" onClick={onClick} style={{ width: '100%', textAlign: 'left', border: 'none', background: '#fff' }}>
+    <button className="card doc-history-item" onClick={onClick} style={{ width: '100%', textAlign: 'left' }}>
       <div className="doc-history-icon">
         <FileText size={18} />
       </div>

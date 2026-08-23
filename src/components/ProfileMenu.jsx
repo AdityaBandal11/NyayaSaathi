@@ -59,13 +59,13 @@ export default function ProfileMenu() {
       {open && (
         <div className="profile-menu-dropdown" role="menu">
           <div className="profile-menu-header">
-            <div className="avatar" style={{ width: 34, height: 34, fontSize: 13 }}>
+            <div className="avatar" style={{ width: 38, height: 38, fontSize: 13 }}>
               {initials}
             </div>
             <div>
               <div className="name">{profile.name}</div>
+              <div className="profile-menu-type">{isGuest ? 'Guest' : profile.userType}</div>
               {!isGuest && profile.email && <div className="email">{profile.email}</div>}
-              {isGuest && <div className="email">Guest</div>}
             </div>
           </div>
 

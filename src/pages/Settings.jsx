@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Accessibility, Palette, SlidersHorizontal, UserRound } from 'lucide-react'
 import Card from '../components/Card.jsx'
 import Button from '../components/Button.jsx'
+import ThemeToggle from '../components/ThemeToggle.jsx'
 import { useToast } from '../components/Toast.jsx'
 import { useProfile, getInitials } from '../ProfileContext.jsx'
 
@@ -48,7 +50,6 @@ export default function Settings() {
   const { showToast } = useToast()
   const { profile, setProfile } = useProfile()
 
-  // Draft state for the form — the global profile only updates on Save.
   const [formData, setFormData] = useState(profile)
   const [errors, setErrors] = useState({})
 
@@ -58,7 +59,6 @@ export default function Settings() {
     voiceInput: false,
   })
 
-  // Keep the draft in sync if the profile changes elsewhere (e.g. guest login).
   useEffect(() => {
     setFormData(profile)
   }, [profile])
@@ -103,22 +103,26 @@ export default function Settings() {
   const previewInitials = getInitials(formData.name)
 
   return (
-    <div>
+    <div className="settings-page">
       <div className="page-header">
         <div>
+          <span className="eyebrow">Profile and preferences</span>
           <h1>Settings</h1>
           <p>Manage your profile, language and accessibility preferences.</p>
         </div>
       </div>
 
-      <Card className="settings-section">
-        <h3>Profile</h3>
+      <Card className="settings-section profile-information-section">
+        <div className="settings-section-title">
+          <span><UserRound size={17} /> Profile Information</span>
+          <p>Keep your details current so NyayaSaathi can personalize civic guidance.</p>
+        </div>
 
         <div className="settings-avatar-row">
           <div className="avatar">{previewInitials}</div>
           <div>
             <div className="name">{formData.name || 'Your name'}</div>
-            <div className="role">{formData.userType || 'Citizen'}</div>
+            <div className="role">{formData.userType || 'Citizen'} · {formData.state || 'State not set'}</div>
           </div>
         </div>
 
@@ -171,7 +175,7 @@ export default function Settings() {
           </div>
 
           <div className="field-group">
-            <label htmlFor="set-language">Preferred Language</label>
+            <label htmlFor="set-language">Language</label>
             <select id="set-language" value={formData.language || 'English'} onChange={updateField('language')}>
               {LANGUAGES.map((l) => (
                 <option key={l}>{l}</option>
@@ -194,13 +198,16 @@ export default function Settings() {
             Cancel
           </Button>
           <Button size="sm" onClick={handleSave}>
-            Save Changes
+            Save
           </Button>
         </div>
       </Card>
 
       <Card className="settings-section">
-        <h3>Preferred Language</h3>
+        <div className="settings-section-title">
+          <span><SlidersHorizontal size={17} /> Preferences</span>
+          <p>Choose the language and experience defaults you prefer.</p>
+        </div>
         <div className="lang-pills">
           {LANGUAGES.map((l) => (
             <button
@@ -219,31 +226,43 @@ export default function Settings() {
         </div>
       </Card>
 
+      <div className="settings-grid-two">
+        <Card className="settings-section">
+          <div className="settings-section-title">
+            <span><Accessibility size={17} /> Accessibility</span>
+            <p>Controls that make the interface easier to read and operate.</p>
+          </div>
+          <div className="settings-row">
+            <div>
+              <div className="settings-row-label">Larger Text</div>
+              <div className="settings-row-desc">Increase text size across the app.</div>
+            </div>
+            <button className={`toggle ${toggles.largerText ? 'on' : ''}`} onClick={() => flip('largerText')} role="switch" aria-checked={toggles.largerText} aria-label="Larger text" />
+          </div>
+          <div className="settings-row">
+            <div>
+              <div className="settings-row-label">High Contrast</div>
+              <div className="settings-row-desc">Increase color contrast for readability.</div>
+            </div>
+            <button className={`toggle ${toggles.highContrast ? 'on' : ''}`} onClick={() => flip('highContrast')} role="switch" aria-checked={toggles.highContrast} aria-label="High contrast" />
+          </div>
+          <div className="settings-row" style={{ borderBottom: 'none' }}>
+            <div>
+              <div className="settings-row-label">Voice Input</div>
+              <div className="settings-row-desc">Allow speaking your questions to the AI assistant.</div>
+            </div>
+            <button className={`toggle ${toggles.voiceInput ? 'on' : ''}`} onClick={() => flip('voiceInput')} role="switch" aria-checked={toggles.voiceInput} aria-label="Voice input" />
+          </div>
+        </Card>
 
-      <Card className="settings-section">
-        <h3>Accessibility</h3>
-        <div className="settings-row">
-          <div>
-            <div className="settings-row-label">Larger Text</div>
-            <div className="settings-row-desc">Increase text size across the app.</div>
+        <Card className="settings-section appearance-section">
+          <div className="settings-section-title">
+            <span><Palette size={17} /> Appearance</span>
+            <p>Switch between light and dark mode without losing your current work.</p>
           </div>
-          <button className={`toggle ${toggles.largerText ? 'on' : ''}`} onClick={() => flip('largerText')} role="switch" aria-checked={toggles.largerText} aria-label="Larger text" />
-        </div>
-        <div className="settings-row">
-          <div>
-            <div className="settings-row-label">High Contrast</div>
-            <div className="settings-row-desc">Increase color contrast for readability.</div>
-          </div>
-          <button className={`toggle ${toggles.highContrast ? 'on' : ''}`} onClick={() => flip('highContrast')} role="switch" aria-checked={toggles.highContrast} aria-label="High contrast" />
-        </div>
-        <div className="settings-row" style={{ borderBottom: 'none' }}>
-          <div>
-            <div className="settings-row-label">Voice Input</div>
-            <div className="settings-row-desc">Allow speaking your questions to the AI assistant.</div>
-          </div>
-          <button className={`toggle ${toggles.voiceInput ? 'on' : ''}`} onClick={() => flip('voiceInput')} role="switch" aria-checked={toggles.voiceInput} aria-label="Voice input" />
-        </div>
-      </Card>
+          <ThemeToggle />
+        </Card>
+      </div>
     </div>
   )
 }

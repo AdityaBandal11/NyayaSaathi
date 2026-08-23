@@ -1,12 +1,43 @@
-import { Bookmark } from 'lucide-react'
+import {
+  Bookmark,
+  BriefcaseBusiness,
+  GraduationCap,
+  HeartPulse,
+  Home as HomeIcon,
+  Landmark,
+  ShieldCheck,
+  Sprout,
+  Users,
+} from 'lucide-react'
 import Card from './Card.jsx'
 import Button from './Button.jsx'
 
+const ICONS = {
+  Agriculture: Sprout,
+  Healthcare: HeartPulse,
+  Housing: HomeIcon,
+  Education: GraduationCap,
+  'Skill Development': BriefcaseBusiness,
+  'Social Security': Users,
+  'Business & Enterprise': BriefcaseBusiness,
+  Welfare: ShieldCheck,
+}
+
 export default function SchemeCard({ scheme, saved, onToggleSave, onViewDetails, onCheckEligibility }) {
+  const SchemeIcon = ICONS[scheme.category] || Landmark
+
   return (
     <Card hover className="scheme-card">
       <div className="scheme-card-top">
-        <h3>{scheme.name}</h3>
+        <div className="scheme-title-wrap">
+          <span className="scheme-icon">
+            <SchemeIcon size={20} />
+          </span>
+          <div>
+            <h3>{scheme.name}</h3>
+            <span className="badge badge-blue">{scheme.category}</span>
+          </div>
+        </div>
         <button
           className={`save-btn ${saved ? 'saved' : ''}`}
           onClick={() => onToggleSave(scheme.id)}
@@ -16,9 +47,6 @@ export default function SchemeCard({ scheme, saved, onToggleSave, onViewDetails,
           <Bookmark size={19} fill={saved ? 'currentColor' : 'none'} />
         </button>
       </div>
-      <span className="badge badge-blue" style={{ alignSelf: 'flex-start' }}>
-        {scheme.category}
-      </span>
       <p className="desc">{scheme.description}</p>
       <div className="scheme-meta">
         <span>

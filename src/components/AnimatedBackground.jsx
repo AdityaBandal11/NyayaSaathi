@@ -15,7 +15,7 @@
  * - Theme-aware via CSS variables
  */
 
-// 12 subtle ambient particles with balanced distribution
+// 20 subtle ambient particles with balanced distribution.
 const PARTICLES = [
   { x: 12, y: 18, size: 3.5, dur: 24, delay: 0 },
   { x: 28, y: 75, size: 2.5, dur: 30, delay: 3 },
@@ -27,8 +27,16 @@ const PARTICLES = [
   { x: 62, y: 15, size: 3.0, dur: 29, delay: 3.5 },
   { x: 38, y: 90, size: 2.5, dur: 27, delay: 7 },
   { x: 76, y: 48, size: 3.0, dur: 23, delay: 1 },
-  { x: 8,  y: 85, size: 2.0, dur: 31, delay: 4.5 },
+  { x: 8, y: 85, size: 2.0, dur: 31, delay: 4.5 },
   { x: 52, y: 62, size: 2.5, dur: 25, delay: 8 },
+  { x: 16, y: 58, size: 2.2, dur: 29, delay: 9 },
+  { x: 34, y: 12, size: 2.8, dur: 27, delay: 5.5 },
+  { x: 44, y: 78, size: 1.8, dur: 33, delay: 2.8 },
+  { x: 58, y: 42, size: 2.4, dur: 26, delay: 6.5 },
+  { x: 70, y: 8, size: 2.0, dur: 31, delay: 7.5 },
+  { x: 82, y: 90, size: 2.7, dur: 24, delay: 4.2 },
+  { x: 94, y: 38, size: 1.9, dur: 28, delay: 10 },
+  { x: 6, y: 30, size: 2.4, dur: 35, delay: 11 },
 ]
 
 export default function AnimatedBackground() {
@@ -38,6 +46,7 @@ export default function AnimatedBackground() {
       <div className="animated-bg__orb animated-bg__orb--blue" />
       <div className="animated-bg__orb animated-bg__orb--green" />
       <div className="animated-bg__orb animated-bg__orb--indigo" />
+      <div className="animated-bg__orb animated-bg__orb--cyan" />
 
       {/* Layer 2: Soft Particles */}
       <div className="animated-bg__particles-wrap">

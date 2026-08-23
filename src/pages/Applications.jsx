@@ -1,19 +1,43 @@
 import { useState } from 'react'
-import { ClipboardList } from 'lucide-react'
+import { CalendarClock, ClipboardList, FileText } from 'lucide-react'
 import Card from '../components/Card.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
 import Modal from '../components/Modal.jsx'
 import Button from '../components/Button.jsx'
 import { initialApplications } from '../data/applications.js'
 
+const STATUS_STEPS = ['Draft', 'Submitted', 'Processing', 'Completed']
+
+function getStepState(status, step) {
+  const current = STATUS_STEPS.indexOf(status)
+  const idx = STATUS_STEPS.indexOf(step)
+  if (idx < current) return 'done'
+  if (idx === current) return 'active'
+  return ''
+}
+
+function ApplicationTimeline({ status }) {
+  return (
+    <div className="application-timeline" aria-label={`Application status: ${status}`}>
+      {STATUS_STEPS.map((step) => (
+        <div key={step} className={`application-step ${getStepState(status, step)}`}>
+          <span className="application-step-dot" />
+          <span>{step}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function Applications() {
   const [applications] = useState(initialApplications)
   const [active, setActive] = useState(null)
 
   return (
-    <div>
+    <div className="applications-page">
       <div className="page-header">
         <div>
+          <span className="eyebrow">Track progress</span>
           <h1>My Applications</h1>
           <p>Track the status of everything you've started with NyayaSaathi.</p>
         </div>
@@ -26,45 +50,26 @@ export default function Applications() {
           <p>Applications you create will show up here.</p>
         </div>
       ) : (
-        <Card style={{ overflow: 'hidden' }}>
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th>Application</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Last Updated</th>
-              </tr>
-            </thead>
-            <tbody>
-              {applications.map((a) => (
-                <tr key={a.id} onClick={() => setActive(a)} style={{ cursor: 'pointer' }}>
-                  <td>
-                    <div style={{ fontWeight: 600 }}>{a.title}</div>
-                    <div style={{ fontSize: 12.5, color: 'var(--color-text-faint)' }}>{a.subtitle}</div>
-                  </td>
-                  <td>{a.type}</td>
-                  <td><StatusBadge status={a.status} /></td>
-                  <td style={{ color: 'var(--color-text-faint)' }}>{a.updated}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
+        <div className="applications-grid">
+          {applications.map((a) => (
+            <Card hover key={a.id} className="application-status-card" onClick={() => setActive(a)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') setActive(a) }}>
+              <div className="application-card-head">
+                <div className="application-icon">
+                  <FileText size={18} />
+                </div>
+                <StatusBadge status={a.status} />
+              </div>
+              <h3>{a.title}</h3>
+              <p>{a.subtitle}</p>
+              <ApplicationTimeline status={a.status} />
+              <div className="application-card-foot">
+                <span>{a.type}</span>
+                <span><CalendarClock size={14} /> {a.updated}</span>
+              </div>
+            </Card>
+          ))}
+        </div>
       )}
-
-      <div className="app-cards">
-        {applications.map((a) => (
-          <Card key={a.id} className="app-list-card" onClick={() => setActive(a)}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ fontWeight: 700, fontSize: 14.5 }}>{a.title}</div>
-              <StatusBadge status={a.status} />
-            </div>
-            <div style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{a.subtitle}</div>
-            <div style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>{a.type} · {a.updated}</div>
-          </Card>
-        ))}
-      </div>
 
       {active && (
         <Modal
@@ -72,13 +77,13 @@ export default function Applications() {
           onClose={() => setActive(null)}
           footer={<Button variant="secondary" onClick={() => setActive(null)}>Close</Button>}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div>
-              <StatusBadge status={active.status} />
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--color-text-muted)' }}>{active.subtitle}</p>
-            <div style={{ fontSize: 13, color: 'var(--color-text-faint)' }}>
-              Type: {active.type} · Last updated {active.updated}
+          <div className="application-modal-body">
+            <StatusBadge status={active.status} />
+            <p>{active.subtitle}</p>
+            <ApplicationTimeline status={active.status} />
+            <div className="application-modal-meta">
+              <span>Type: {active.type}</span>
+              <span>Last updated {active.updated}</span>
             </div>
           </div>
         </Modal>

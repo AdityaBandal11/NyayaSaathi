@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Search, SlidersHorizontal, PackageSearch } from 'lucide-react'
+import { Check, PackageSearch, Search, SlidersHorizontal } from 'lucide-react'
 import SchemeCard from '../components/SchemeCard.jsx'
 import SchemeModal from '../components/SchemeModal.jsx'
 import Modal from '../components/Modal.jsx'
@@ -8,6 +8,15 @@ import { schemes, categories, occupations, states, ruralUrbanOptions } from '../
 import { initialSavedSchemeIds } from '../data/applications.js'
 import { useToast } from '../components/Toast.jsx'
 
+const QUICK_FILTERS = [
+  { label: 'All', category: 'All Categories', occupation: 'Any' },
+  { label: 'Farmers', category: 'All Categories', occupation: 'Farmer' },
+  { label: 'Students', category: 'All Categories', occupation: 'Student' },
+  { label: 'Workers', category: 'All Categories', occupation: 'Worker' },
+  { label: 'Healthcare', category: 'Healthcare', occupation: 'Any' },
+  { label: 'Housing', category: 'Housing', occupation: 'Any' },
+]
+
 export default function Schemes() {
   const { showToast } = useToast()
   const [query, setQuery] = useState('')
@@ -15,6 +24,7 @@ export default function Schemes() {
   const [occupation, setOccupation] = useState('Any')
   const [state, setState] = useState('All India')
   const [ruralUrban, setRuralUrban] = useState('Any')
+  const [quickFilter, setQuickFilter] = useState('All')
   const [savedIds, setSavedIds] = useState(initialSavedSchemeIds)
   const [activeScheme, setActiveScheme] = useState(null)
   const [modalMode, setModalMode] = useState('details')
@@ -50,24 +60,52 @@ export default function Schemes() {
     })
   }
 
+  const applyQuickFilter = (filter) => {
+    setQuickFilter(filter.label)
+    setCategory(filter.category)
+    setOccupation(filter.occupation)
+  }
+
+  const markCustom = () => setQuickFilter('Custom')
+
   const filterControls = (
     <div className="filter-row">
-      <select className="filter-select" value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Filter by category">
+      <select
+        className="filter-select"
+        value={category}
+        onChange={(e) => { setCategory(e.target.value); markCustom() }}
+        aria-label="Filter by category"
+      >
         {categories.map((c) => (
           <option key={c}>{c}</option>
         ))}
       </select>
-      <select className="filter-select" value={occupation} onChange={(e) => setOccupation(e.target.value)} aria-label="Filter by occupation">
+      <select
+        className="filter-select"
+        value={occupation}
+        onChange={(e) => { setOccupation(e.target.value); markCustom() }}
+        aria-label="Filter by occupation"
+      >
         {occupations.map((o) => (
           <option key={o}>{o}</option>
         ))}
       </select>
-      <select className="filter-select" value={state} onChange={(e) => setState(e.target.value)} aria-label="Filter by state">
+      <select
+        className="filter-select"
+        value={state}
+        onChange={(e) => { setState(e.target.value); markCustom() }}
+        aria-label="Filter by state"
+      >
         {states.map((s) => (
           <option key={s}>{s}</option>
         ))}
       </select>
-      <select className="filter-select" value={ruralUrban} onChange={(e) => setRuralUrban(e.target.value)} aria-label="Filter by rural or urban">
+      <select
+        className="filter-select"
+        value={ruralUrban}
+        onChange={(e) => { setRuralUrban(e.target.value); markCustom() }}
+        aria-label="Filter by rural or urban"
+      >
         {ruralUrbanOptions.map((r) => (
           <option key={r}>{r}</option>
         ))}
@@ -76,25 +114,43 @@ export default function Schemes() {
   )
 
   return (
-    <div>
-      <div className="page-header">
+    <div className="schemes-page">
+      <div className="page-header schemes-hero-header">
         <div>
-          <h1>Government Schemes</h1>
-          <p>Find schemes and benefits relevant to your situation.</p>
+          <span className="eyebrow">Government services</span>
+          <h1>Find Government Schemes</h1>
+          <p>Search benefits and eligibility rules relevant to your household, work and location.</p>
         </div>
         <Button variant="secondary" size="sm" icon={SlidersHorizontal} className="filter-toggle-btn" onClick={() => setFilterDrawerOpen(true)}>
           Filters
         </Button>
       </div>
 
-      <div className="search-bar">
+      <div className="search-bar schemes-search">
         <Search size={17} />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search schemes..."
+          placeholder="Search schemes, benefits, eligibility..."
           aria-label="Search schemes"
         />
+      </div>
+
+      <div className="quick-filter-row" aria-label="Quick scheme filters">
+        {QUICK_FILTERS.map((filter) => {
+          const active = quickFilter === filter.label
+          return (
+            <button
+              key={filter.label}
+              className={`filter-pill ${active ? 'active' : ''}`}
+              onClick={() => applyQuickFilter(filter)}
+              aria-pressed={active}
+            >
+              {active && <Check size={14} />}
+              {filter.label}
+            </button>
+          )
+        })}
       </div>
 
       {filterControls}
@@ -142,7 +198,7 @@ export default function Schemes() {
         <Modal title="Filter Schemes" onClose={() => setFilterDrawerOpen(false)}>
           <div className="field-group">
             <label>Category</label>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <select value={category} onChange={(e) => { setCategory(e.target.value); markCustom() }}>
               {categories.map((c) => (
                 <option key={c}>{c}</option>
               ))}
@@ -150,7 +206,7 @@ export default function Schemes() {
           </div>
           <div className="field-group">
             <label>Occupation</label>
-            <select value={occupation} onChange={(e) => setOccupation(e.target.value)}>
+            <select value={occupation} onChange={(e) => { setOccupation(e.target.value); markCustom() }}>
               {occupations.map((o) => (
                 <option key={o}>{o}</option>
               ))}
@@ -158,7 +214,7 @@ export default function Schemes() {
           </div>
           <div className="field-group">
             <label>State</label>
-            <select value={state} onChange={(e) => setState(e.target.value)}>
+            <select value={state} onChange={(e) => { setState(e.target.value); markCustom() }}>
               {states.map((s) => (
                 <option key={s}>{s}</option>
               ))}
@@ -166,7 +222,7 @@ export default function Schemes() {
           </div>
           <div className="field-group">
             <label>Rural / Urban</label>
-            <select value={ruralUrban} onChange={(e) => setRuralUrban(e.target.value)}>
+            <select value={ruralUrban} onChange={(e) => { setRuralUrban(e.target.value); markCustom() }}>
               {ruralUrbanOptions.map((r) => (
                 <option key={r}>{r}</option>
               ))}

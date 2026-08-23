@@ -44,7 +44,7 @@ function AppLayout() {
             <button className="btn-icon hamburger-btn" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
               <Menu size={18} />
             </button>
-            <span className="app-header-title">{title}</span>
+            <div className="app-header-heading"><span className="app-header-kicker">NyayaSaathi</span><span className="app-header-title">{title}</span></div>
           </div>
           <div className="app-header-actions">
             <ThemeToggle compact />
@@ -54,7 +54,7 @@ function AppLayout() {
             <ProfileMenu />
           </div>
         </header>
-        <div className="page-content">
+        <div className="page-content" key={location.pathname}>
           <Outlet />
         </div>
         <MobileNav />

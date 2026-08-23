@@ -98,9 +98,12 @@ Aditya`
           const isDone = step > n
           const isActive = step === n
           return (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', flex: n < 4 ? 1 : 'unset' }}>
-              <div className={`wizard-step-dot ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}>
-                {isDone ? <Check size={14} /> : n}
+            <div key={label} className="wizard-progress-unit" style={{ flex: n < 4 ? 1 : 'unset' }}>
+              <div className="wizard-step-wrap">
+                <div className={`wizard-step-dot ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}>
+                  {isDone ? <Check size={14} /> : n}
+                </div>
+                <span className="wizard-step-label">Step {n}: {label}</span>
               </div>
               {n < 4 && <div className={`wizard-line ${isDone ? 'done' : ''}`} />}
             </div>
