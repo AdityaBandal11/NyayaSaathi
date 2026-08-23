@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import Card from '../components/Card.jsx'
 import Button from '../components/Button.jsx'
-import ThemeToggle from '../components/ThemeToggle.jsx'
 import { useToast } from '../components/Toast.jsx'
 import { useProfile, getInitials } from '../ProfileContext.jsx'
-import { useTheme } from '../ThemeContext.jsx'
 
 const LANGUAGES = ['English', 'Hindi', 'Marathi']
 
@@ -27,11 +25,16 @@ const INDIAN_STATES = [
   'Madhya Pradesh',
   'Maharashtra',
   'Manipur',
+  'Meghalaya',
+  'Mizoram',
+  'Nagaland',
   'Odisha',
   'Punjab',
   'Rajasthan',
+  'Sikkim',
   'Tamil Nadu',
   'Telangana',
+  'Tripura',
   'Uttar Pradesh',
   'Uttarakhand',
   'West Bengal',
@@ -44,7 +47,6 @@ function isValidEmail(value) {
 export default function Settings() {
   const { showToast } = useToast()
   const { profile, setProfile } = useProfile()
-  const { theme, toggleTheme } = useTheme()
 
   // Draft state for the form — the global profile only updates on Save.
   const [formData, setFormData] = useState(profile)
@@ -217,29 +219,6 @@ export default function Settings() {
         </div>
       </Card>
 
-      <Card className="settings-section">
-        <h3>Appearance</h3>
-        <div className="settings-row">
-          <div>
-            <div className="settings-row-label">Dark Mode</div>
-            <div className="settings-row-desc">Toggle between light and dark themes across the app.</div>
-          </div>
-          <button
-            className={`toggle ${theme === 'dark' ? 'on' : ''}`}
-            onClick={toggleTheme}
-            role="switch"
-            aria-checked={theme === 'dark'}
-            aria-label="Toggle dark mode"
-          />
-        </div>
-        <div className="settings-row" style={{ borderBottom: 'none' }}>
-          <div>
-            <div className="settings-row-label">Quick switch</div>
-            <div className="settings-row-desc">Same setting, shown as a light/dark pair.</div>
-          </div>
-          <ThemeToggle />
-        </div>
-      </Card>
 
       <Card className="settings-section">
         <h3>Accessibility</h3>

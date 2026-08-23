@@ -6,6 +6,7 @@ import MobileNav from './components/MobileNav.jsx'
 import ThemeToggle from './components/ThemeToggle.jsx'
 import ProfileMenu from './components/ProfileMenu.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import AnimatedBackground from './components/AnimatedBackground.jsx'
 
 import Landing from './pages/Landing.jsx'
 import Login from './pages/Login.jsx'
@@ -64,22 +65,25 @@ function AppLayout() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/login" element={<Login />} />
+    <div className="root-shell">
+      <AnimatedBackground />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/app" element={<AppLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="assistant" element={<Assistant />} />
-          <Route path="schemes" element={<Schemes />} />
-          <Route path="rti" element={<RTIAssistant />} />
-          <Route path="documents" element={<Documents />} />
-          <Route path="applications" element={<Applications />} />
-          <Route path="saved" element={<Saved />} />
-          <Route path="settings" element={<Settings />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/app" element={<AppLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="assistant" element={<Assistant />} />
+            <Route path="schemes" element={<Schemes />} />
+            <Route path="rti" element={<RTIAssistant />} />
+            <Route path="documents" element={<Documents />} />
+            <Route path="applications" element={<Applications />} />
+            <Route path="saved" element={<Saved />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </div>
   )
 }

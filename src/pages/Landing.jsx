@@ -95,7 +95,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div style={{ position: 'relative' }}>
+          <div className="hero-preview-wrapper">
             <div className="float-badge float-badge-1"><ShieldCheck size={14} /> Trusted Sources</div>
             <div className="float-badge float-badge-2"><Languages size={14} /> हिंदी · मराठी · English</div>
             <div className="ai-preview-card">
@@ -226,11 +226,12 @@ export default function Landing() {
       <footer className="footer">
         <div className="container">
           <div className="disclaimer-strip" style={{ marginBottom: 28 }}>
-            <Info size={16} />
-            <span>
+            <Info size={18} />
+            <div>
+              <strong>Disclaimer: </strong>
               NyayaSaathi AI provides general informational guidance and is not a substitute for professional legal advice.
               This is a prototype built for hackathon demonstration and does not provide legal representation.
-            </span>
+            </div>
           </div>
           <div className="footer-top">
             <div>

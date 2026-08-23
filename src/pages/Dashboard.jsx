@@ -44,9 +44,12 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div className="dash-header" style={{ marginBottom: 26 }}>
-        <h1>Good morning, {firstName} 👋</h1>
-        <p>How can NyayaSaathi help you today?</p>
+      <div className="dash-hero-wrap">
+        <div className="dash-hero-glow" aria-hidden="true" />
+        <div className="dash-header">
+          <h1>Good morning, {firstName} 👋</h1>
+          <p>How can NyayaSaathi help you today?</p>
+        </div>
       </div>
 
       <div className="grid-4" style={{ marginBottom: 28 }}>

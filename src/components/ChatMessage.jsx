@@ -6,7 +6,7 @@ import { useToast } from './Toast.jsx'
 
 function UserBubble({ text }) {
   return (
-    <div className="msg-row user">
+    <div className="msg-row user msg-animate">
       <div className="msg-avatar user">
         <User size={15} />
       </div>
@@ -17,7 +17,7 @@ function UserBubble({ text }) {
 
 export function TypingRow() {
   return (
-    <div className="msg-row ai typing-row">
+    <div className="msg-row ai typing-row msg-animate">
       <div className="msg-avatar ai">
         <Bot size={15} />
       </div>
@@ -63,7 +63,11 @@ export default function ChatMessage({ message }) {
         </h4>
         <div className="ladder">
           {actionPlan.map((step, i) => (
-            <div className="ladder-step" key={i}>
+            <div
+              className="ladder-step ladder-step-animate"
+              key={i}
+              style={{ animationDelay: `${0.05 + i * 0.1}s` }}
+            >
               <h4>Step {i + 1}</h4>
               <p>{step}</p>
             </div>
