@@ -1,46 +1,69 @@
-# NyayaSaathi AI
+# ⚖️ NyayaSaathi AI
 
-**Understand Your Rights. Take the Right Action.**
+### Understand Your Rights. Take the Right Action.
 
-A frontend-only hackathon prototype for an AI-powered civic and legal empowerment platform for Indian citizens. Built with React, Vite and React Router. All AI responses, schemes, and document analysis are simulated with mock data — there is no real backend, authentication, or legal service.
+> An AI-powered civic and legal empowerment platform designed to make government services, schemes, rights and bureaucratic processes easier to understand.
 
-## Run locally
+NyayaSaathi AI helps citizens navigate complex civic information through **simple explanations, guided action plans and accessible government information**.
 
-```bash
+## ✨ Key Features
+
+- 🤖 **Civic AI Assistant** — Get simple guidance for everyday civic and legal questions.
+- 🏛️ **Government Scheme Finder** — Search and explore schemes based on user requirements.
+- 📝 **RTI Assistant** — Create an RTI application through a simple step-by-step process.
+- 📄 **Document Explainer** — Understand important points, dates and responsibilities in documents.
+- 📋 **Application Tracking** — Track application progress with clear status indicators.
+- 👤 **Personalized Profile** — Manage user information and preferences.
+- 🌗 **Light & Dark Mode** — Modern responsive themes with smooth transitions.
+- 📱 **Responsive UI** — Optimized for desktop, tablet and mobile.
+
+## 🛠️ Tech Stack
+
+- React.js
+- Vite
+- JavaScript
+- React Router
+- HTML5
+- CSS3
+
+## 📂 Project Structure
+
+```text
+src/
+├── components/     # Reusable UI components
+├── pages/          # Application pages
+├── data/           # Mock schemes, applications & AI responses
+├── hooks/          # Shared React hooks
+├── App.jsx         # Routes & application shell
+├── main.jsx        # React entry point
+└── index.css       # Global styles & design tokens
+🚀 Run Locally
 npm install
 npm run dev
-```
 
-Then open the printed local URL (typically http://localhost:5173).
+Then open the local URL shown in the terminal.
 
-## Build
+🎬 Demo Flow
+Open the landing page and select Ask NyayaSaathi.
+Ask: "My landlord is refusing to return my deposit."
+Explore the AI response, action plan and required documents.
+Open Government Schemes and search for farmer.
+Try the RTI Assistant and complete the 4-step wizard.
+Explore the dashboard, profile and theme switching.
+🧠 Prototype
 
-```bash
-npm run build
-npm run preview
-```
+NyayaSaathi is currently a frontend-only hackathon prototype.
 
-## Project structure
+AI responses, government schemes, document analysis, application status and other interactions use simulated/mock data. No production backend or real legal service is connected.
 
-```
-src/
-├── components/   Reusable UI building blocks
-├── pages/        Route-level pages (landing + in-app screens)
-├── data/         Mock scheme, application and AI-response data
-├── hooks/        Small shared hooks
-├── App.jsx       Routes + app shell layout
-├── main.jsx      React entry point
-└── index.css     Design tokens + global styles
-```
+⚠️ Disclaimer
 
-## Demo flow
+NyayaSaathi AI provides general informational guidance and is not a substitute for professional legal advice. Information should be verified with the relevant official authority before taking real-world action.
 
-1. Landing page → **Ask NyayaSaathi**
-2. Ask: *"My landlord is refusing to return my deposit."*
-3. Watch the typing animation → action plan → required documents → sources
-4. Visit **Government Schemes**, search "farmer"
-5. Visit **RTI Assistant**, complete the 4-step wizard, download the draft
+Built for hackathon demonstration purposes.
 
-## Disclaimer
+🌍 Vision
 
-NyayaSaathi AI provides general informational guidance and is not a substitute for professional legal advice. This is a prototype built for hackathon demonstration only.
+Making civic information simple, accessible and actionable for everyone.
+
+NyayaSaathi AI — Technology that helps citizens understand their rights.
