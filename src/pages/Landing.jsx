@@ -24,31 +24,7 @@ import Navbar from '../components/Navbar.jsx'
 import Card from '../components/Card.jsx'
 import Button from '../components/Button.jsx'
 import useReveal from '../hooks/useReveal.js'
-
-const HOW_IT_WORKS = [
-  { num: '01', title: 'Tell Us Your Problem', desc: 'Describe your situation in simple language.', icon: MessageSquareText },
-  { num: '02', title: 'AI Understands', desc: 'NyayaSaathi identifies the relevant topic and context.', icon: BrainCircuit },
-  { num: '03', title: 'Trusted Information', desc: 'Relevant information is retrieved from official sources.', icon: Landmark },
-  { num: '04', title: 'Take Action', desc: 'Receive a clear step-by-step action plan.', icon: ListChecks },
-]
-
-const FEATURES = [
-  { icon: Sparkles, title: 'Simple Language', desc: 'Understand complicated government information easily.' },
-  { icon: Languages, title: 'Multilingual', desc: 'English, Hindi and Marathi.' },
-  { icon: ShieldCheck, title: 'Trusted Information', desc: 'Answers are designed around official sources.' },
-  { icon: UserCheck, title: 'Personalized', desc: "Recommendations based on the citizen's situation." },
-  { icon: ArrowUpRight, title: 'Action-Oriented', desc: 'Not just information — clear next steps.' },
-  { icon: Users, title: 'Accessible', desc: 'Designed for users with different levels of digital literacy.' },
-]
-
-const USER_TYPES = [
-  { emoji: '🎓', icon: GraduationCap, title: 'Students', example: 'Find scholarships you may qualify for.' },
-  { emoji: '🌾', icon: Wheat, title: 'Farmers', example: 'Understand PM-KISAN and crop support schemes.' },
-  { emoji: '👷', icon: HardHat, title: 'Workers', example: 'Know what to do about unpaid wages.' },
-  { emoji: '🏠', icon: HomeIcon, title: 'Tenants', example: 'Understand your rental rights.' },
-  { emoji: '👴', icon: Users, title: 'Senior Citizens', example: 'Check pension and healthcare scheme eligibility.' },
-  { emoji: '🏪', icon: Store, title: 'Small Business Owners', example: 'Explore MUDRA loans for your business.' },
-]
+import { useLanguage } from '../LanguageContext.jsx'
 
 function Reveal({ children, className = '' }) {
   const ref = useReveal()
@@ -61,6 +37,32 @@ function Reveal({ children, className = '' }) {
 
 export default function Landing() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
+
+  const HOW_IT_WORKS = [
+    { num: '01', title: t('step1Title', '1. Describe Your Situation'), desc: t('step1Desc', 'Describe your situation in simple language.'), icon: MessageSquareText },
+    { num: '02', title: t('step2Title', '2. Get Rights & Action Plan'), desc: t('step2Desc', 'NyayaSaathi identifies the relevant topic and context.'), icon: BrainCircuit },
+    { num: '03', title: t('step3Title', '3. Take Action Easily'), desc: t('step3Desc', 'Relevant information is retrieved from official sources.'), icon: Landmark },
+    { num: '04', title: t('actionPlan', '4. Take Action'), desc: 'Receive a clear step-by-step action plan.', icon: ListChecks },
+  ]
+
+  const FEATURES = [
+    { icon: Sparkles, title: t('feature1Title', 'AI Civic Assistant'), desc: t('feature1Desc', '24/7 assistance for tenant issues, salary delays, consumer complaints.') },
+    { icon: Languages, title: t('feature2Title', 'Voice Interaction'), desc: t('feature2Desc', 'Speak your query hands-free in English, Hindi, and Marathi.') },
+    { icon: ShieldCheck, title: t('feature3Title', 'Government Schemes'), desc: t('feature3Desc', 'Instant eligibility verification for central and state schemes.') },
+    { icon: UserCheck, title: t('feature4Title', 'RTI Generator'), desc: t('feature4Desc', 'Automated drafting for Right to Information applications.') },
+    { icon: ArrowUpRight, title: 'Action-Oriented', desc: 'Not just information — clear next steps.' },
+    { icon: Users, title: 'Accessible', desc: 'Designed for users with different levels of digital literacy.' },
+  ]
+
+  const USER_TYPES = [
+    { emoji: '🎓', icon: GraduationCap, title: 'Students', example: 'Find scholarships you may qualify for.' },
+    { emoji: '🌾', icon: Wheat, title: 'Farmers', example: 'Understand PM-KISAN and crop support schemes.' },
+    { emoji: '👷', icon: HardHat, title: 'Workers', example: 'Know what to do about unpaid wages.' },
+    { emoji: '🏠', icon: HomeIcon, title: 'Tenants', example: 'Understand your rental rights.' },
+    { emoji: '👴', icon: Users, title: 'Senior Citizens', example: 'Check pension and healthcare scheme eligibility.' },
+    { emoji: '🏪', icon: Store, title: 'Small Business Owners', example: 'Explore MUDRA loans for your business.' },
+  ]
 
   return (
     <div id="home">
@@ -71,27 +73,27 @@ export default function Landing() {
         <div className="container hero-grid">
           <div>
             <h1>
-              Understand Your Rights. <span className="accent">Take the Right Action.</span>
+              {t('landingHeroTitle', 'Empowering Citizens with Legal & Civic Clarity')}
             </h1>
             <p className="lead">
-              NyayaSaathi simplifies government schemes, civic rights and legal information into clear, actionable steps.
+              {t('landingHeroSubtitle', 'Understand your rights, navigate government schemes, file RTIs, and solve civic issues in simple, plain language.')}
             </p>
             <div className="hero-actions">
               <Button icon={MessageSquareText} onClick={() => navigate('/app/assistant')}>
-                Ask NyayaSaathi
+                {t('askNyayaSaathi', 'Ask NyayaSaathi')}
               </Button>
               <Button variant="secondary" icon={Landmark} onClick={() => navigate('/app/schemes')}>
-                Explore Schemes
+                {t('checkSchemes', 'Explore Schemes')}
               </Button>
             </div>
             <div className="trust-row">
               <span className="trust-item"><CheckCircle2 size={15} /> AI-Powered</span>
-              <span className="trust-item"><CheckCircle2 size={15} /> Multilingual</span>
+              <span className="trust-item"><CheckCircle2 size={15} /> Multilingual (EN/HI/MR)</span>
               <span className="trust-item"><CheckCircle2 size={15} /> Government Information</span>
               <span className="trust-item"><CheckCircle2 size={15} /> Citizen First</span>
             </div>
             <p className="disclaimer-inline">
-              NyayaSaathi provides informational guidance and is not a substitute for professional legal advice.
+              {t('footerDisclaimer', 'NyayaSaathi AI provides legal literacy and civic guidance. It does not replace professional legal representation.')}
             </p>
           </div>
 
@@ -104,23 +106,23 @@ export default function Landing() {
                   <Scale size={15} />
                 </span>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>AI Assistant</div>
-                  <div style={{ fontSize: 11.5, color: 'var(--color-text-faint)' }}>Civic Rights Assistant</div>
+                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>{t('assistantTitle', 'NyayaSaathi AI')}</div>
+                  <div style={{ fontSize: 11.5, color: 'var(--color-text-faint)' }}>{t('assistantSubtitle', 'Your Civic Rights Assistant')}</div>
                 </div>
                 <span className="ai-dot" style={{ marginLeft: 'auto' }} />
               </div>
               <div className="ai-preview-body">
-                <div className="bubble bubble-user">My landlord has not returned my security deposit.</div>
+                <div className="bubble bubble-user">{t('tenant', 'My landlord has not returned my security deposit.')}</div>
                 <div className="bubble bubble-ai">
-                  I can help you understand your possible options.
+                  {t('assistantEmptyDesc', 'I can help you understand your possible legal rights and next steps.')}
                 </div>
                 <div className="preview-checklist">
-                  <div className="preview-check-item"><CheckCircle2 size={15} /> Understand your rights</div>
-                  <div className="preview-check-item"><CheckCircle2 size={15} /> Required documents</div>
-                  <div className="preview-check-item"><CheckCircle2 size={15} /> Possible next steps</div>
+                  <div className="preview-check-item"><CheckCircle2 size={15} /> {t('actionPlan', 'Understand your rights')}</div>
+                  <div className="preview-check-item"><CheckCircle2 size={15} /> {t('requiredDocuments', 'Required documents')}</div>
+                  <div className="preview-check-item"><CheckCircle2 size={15} /> {t('explainMore', 'Possible next steps')}</div>
                 </div>
                 <button className="preview-cta" onClick={() => navigate('/app/assistant')}>
-                  View Action Plan <ArrowRight size={14} />
+                  {t('actionPlan', 'View Action Plan')} <ArrowRight size={14} />
                 </button>
               </div>
             </div>
@@ -133,7 +135,7 @@ export default function Landing() {
         <div className="container">
           <Reveal>
             <div className="section-head">
-              <span className="eyebrow">How It Works</span>
+              <span className="eyebrow">{t('howItWorks', 'How It Works')}</span>
               <h2>From confusion to a clear next step</h2>
               <p>Four simple stages take you from a plain-language question to a concrete plan of action.</p>
             </div>
@@ -157,7 +159,7 @@ export default function Landing() {
         <div className="container">
           <Reveal>
             <div className="section-head">
-              <span className="eyebrow">Why NyayaSaathi</span>
+              <span className="eyebrow">{t('whyNyayaSaathi', 'Why NyayaSaathi')}</span>
               <h2>Built around how citizens actually need help</h2>
             </div>
           </Reveal>
@@ -182,7 +184,7 @@ export default function Landing() {
         <div className="container">
           <Reveal>
             <div className="section-head">
-              <span className="eyebrow">Built for Everyone</span>
+              <span className="eyebrow">{t('forCitizens', 'Built for Everyone')}</span>
               <h2>Whoever you are, there's a starting point</h2>
             </div>
           </Reveal>
@@ -212,10 +214,10 @@ export default function Landing() {
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
               <Button icon={MessageSquareText} onClick={() => navigate('/app/assistant')}>
-                Ask NyayaSaathi
+                {t('askNyayaSaathi', 'Ask NyayaSaathi')}
               </Button>
               <Button variant="secondary" onClick={() => navigate('/app')}>
-                Go to Dashboard
+                {t('dashboard', 'Go to Dashboard')}
               </Button>
             </div>
           </Reveal>
@@ -229,8 +231,7 @@ export default function Landing() {
             <Info size={18} />
             <div>
               <strong>Disclaimer: </strong>
-              NyayaSaathi AI provides general informational guidance and is not a substitute for professional legal advice.
-              This is a prototype built for hackathon demonstration and does not provide legal representation.
+              {t('footerDisclaimer', 'NyayaSaathi AI provides legal literacy and civic guidance. It does not replace professional legal representation.')}
             </div>
           </div>
           <div className="footer-top">
@@ -241,19 +242,18 @@ export default function Landing() {
                 </span>
                 NyayaSaathi AI
               </div>
-              <p className="footer-tag">Making civic information easier to understand.</p>
+              <p className="footer-tag">{t('tagline', 'Your Civic Rights Assistant')}</p>
             </div>
             <div className="footer-links">
               <a href="#home">About</a>
-              <a href="#how-it-works">How It Works</a>
-              <a href="#features">Privacy</a>
-              <a href="#features">Disclaimer</a>
+              <a href="#how-it-works">{t('howItWorks', 'How It Works')}</a>
+              <a href="#features">{t('features', 'Features')}</a>
               <a href="#home">Contact</a>
             </div>
           </div>
           <div className="footer-bottom">
             <span>© {new Date().getFullYear()} NyayaSaathi AI</span>
-            <span>Prototype created for hackathon demonstration.</span>
+            <span>{t('allRightsReserved', 'All rights reserved.')}</span>
           </div>
         </div>
       </footer>

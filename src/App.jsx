@@ -4,9 +4,11 @@ import { Menu, Bell } from 'lucide-react'
 import Sidebar from './components/Sidebar.jsx'
 import MobileNav from './components/MobileNav.jsx'
 import ThemeToggle from './components/ThemeToggle.jsx'
+import LanguageSelector from './components/LanguageSelector.jsx'
 import ProfileMenu from './components/ProfileMenu.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import AnimatedBackground from './components/AnimatedBackground.jsx'
+import { useLanguage } from './LanguageContext.jsx'
 
 import Landing from './pages/Landing.jsx'
 import Login from './pages/Login.jsx'
@@ -19,21 +21,24 @@ import Applications from './pages/Applications.jsx'
 import Saved from './pages/Saved.jsx'
 import Settings from './pages/Settings.jsx'
 
-const PAGE_TITLES = {
-  '/app': 'Dashboard',
-  '/app/assistant': 'Ask AI',
-  '/app/schemes': 'Government Schemes',
-  '/app/rti': 'RTI Assistant',
-  '/app/documents': 'My Documents',
-  '/app/applications': 'My Applications',
-  '/app/saved': 'Saved',
-  '/app/settings': 'Settings',
+const PAGE_TITLE_KEYS = {
+  '/app': 'dashboard',
+  '/app/assistant': 'askAI',
+  '/app/schemes': 'schemes',
+  '/app/rti': 'rti',
+  '/app/documents': 'documents',
+  '/app/applications': 'applications',
+  '/app/saved': 'saved',
+  '/app/settings': 'settings',
 }
 
 function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
-  const title = PAGE_TITLES[location.pathname] || 'NyayaSaathi AI'
+  const { t } = useLanguage()
+
+  const titleKey = PAGE_TITLE_KEYS[location.pathname]
+  const title = titleKey ? t(titleKey) : 'NyayaSaathi AI'
 
   return (
     <div className="app-shell">
@@ -44,9 +49,13 @@ function AppLayout() {
             <button className="btn-icon hamburger-btn" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
               <Menu size={18} />
             </button>
-            <div className="app-header-heading"><span className="app-header-kicker">NyayaSaathi</span><span className="app-header-title">{title}</span></div>
+            <div className="app-header-heading">
+              <span className="app-header-kicker">{t('brand', 'NyayaSaathi')}</span>
+              <span className="app-header-title">{title}</span>
+            </div>
           </div>
           <div className="app-header-actions">
+            <LanguageSelector compact />
             <ThemeToggle compact />
             <button className="btn-icon" aria-label="Notifications">
               <Bell size={17} />

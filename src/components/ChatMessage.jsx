@@ -1,8 +1,10 @@
-import { useState } from 'react'
-import { Bot, User, ListChecks, FileSearch, FileOutput, MapPin, ThumbsUp, ThumbsDown } from 'lucide-react'
-import Card from './Card.jsx'
-import SourceCard from './SourceCard.jsx'
-import { useToast } from './Toast.jsx'
+import { useState } from 'react';
+import { Bot, User, ListChecks, FileSearch, FileOutput, MapPin, ThumbsUp, ThumbsDown } from 'lucide-react';
+import Card from './Card.jsx';
+import SourceCard from './SourceCard.jsx';
+import SpeechButton from './SpeechButton.jsx';
+import { useToast } from './Toast.jsx';
+import { useLanguage } from '../LanguageContext.jsx';
 
 function UserBubble({ text }) {
   return (
@@ -12,7 +14,7 @@ function UserBubble({ text }) {
       </div>
       <div className="msg-bubble">{text}</div>
     </div>
-  )
+  );
 }
 
 export function TypingRow() {
@@ -29,24 +31,25 @@ export function TypingRow() {
         </span>
       </div>
     </div>
-  )
+  );
 }
 
 export default function ChatMessage({ message, showSources = true }) {
-  const { showToast } = useToast()
-  const [showDocs, setShowDocs] = useState(false)
-  const [feedback, setFeedback] = useState(null)
+  const { showToast } = useToast();
+  const { t } = useLanguage();
+  const [showDocs, setShowDocs] = useState(false);
+  const [feedback, setFeedback] = useState(null);
 
   if (message.role === 'user') {
-    return <UserBubble text={message.text} />
+    return <UserBubble text={message.text} />;
   }
 
-  const { reply, actionPlan, documents, sources } = message.data
+  const { reply, actionPlan, documents, sources } = message.data || {};
 
   const giveFeedback = (val) => {
-    setFeedback(val)
-    showToast('Thanks for your feedback.')
-  }
+    setFeedback(val);
+    showToast(t('thanksFeedback', 'Thanks for your feedback.'));
+  };
 
   return (
     <div className="ai-response-block">
@@ -57,42 +60,51 @@ export default function ChatMessage({ message, showSources = true }) {
         <div className="msg-bubble">{reply}</div>
       </div>
 
-      <Card className="action-plan-card">
-        <h4>
-          <ListChecks size={16} /> Action Plan
-        </h4>
-        <div className="ladder">
-          {actionPlan.map((step, i) => (
-            <div
-              className="ladder-step ladder-step-animate"
-              key={i}
-              style={{ animationDelay: `${0.05 + i * 0.1}s` }}
-            >
-              <h4>Step {i + 1}</h4>
-              <p>{step}</p>
-            </div>
-          ))}
-        </div>
-      </Card>
+      {actionPlan && actionPlan.length > 0 && (
+        <Card className="action-plan-card">
+          <h4>
+            <ListChecks size={16} /> {t('actionPlan', 'Action Plan')}
+          </h4>
+          <div className="ladder">
+            {actionPlan.map((step, i) => (
+              <div
+                className="ladder-step ladder-step-animate"
+                key={i}
+                style={{ animationDelay: `${0.05 + i * 0.1}s` }}
+              >
+                <h4>Step {i + 1}</h4>
+                <p>{step}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
 
       <div className="ai-action-btns">
-        <button className="btn btn-secondary btn-sm" onClick={() => showToast('Here is more context on this topic.')}>
-          <FileSearch size={14} /> Explain More
+        <SpeechButton textToSpeak={reply} label={t('readAloud', 'Listen')} />
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => showToast(t('explainMore', 'Here is more context on this topic.'))}
+        >
+          <FileSearch size={14} /> {t('explainMore', 'Explain More')}
         </button>
         <button className="btn btn-secondary btn-sm" onClick={() => setShowDocs((s) => !s)}>
-          <FileOutput size={14} /> Required Documents
+          <FileOutput size={14} /> {t('requiredDocuments', 'Required Documents')}
         </button>
         <button className="btn btn-secondary btn-sm" onClick={() => showToast('Draft application started.')}>
-          Generate Application
+          {t('generateApplication', 'Generate Application')}
         </button>
-        <button className="btn btn-secondary btn-sm" onClick={() => showToast('Showing the relevant authority near you.')}>
-          <MapPin size={14} /> Find Authority
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => showToast(t('findAuthority', 'Showing the relevant authority near you.'))}
+        >
+          <MapPin size={14} /> {t('findAuthority', 'Find Authority')}
         </button>
       </div>
 
-      {showDocs && (
+      {showDocs && documents && (
         <div className="panel-box">
-          <h5>Possible documents</h5>
+          <h5>{t('possibleDocuments', 'Possible documents')}</h5>
           <ul>
             {documents.map((d) => (
               <li key={d}>• {d}</li>
@@ -101,9 +113,11 @@ export default function ChatMessage({ message, showSources = true }) {
         </div>
       )}
 
-      {showSources && (
+      {showSources && sources && (
         <div>
-          <p style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--color-text-muted)', marginBottom: 8 }}>Sources</p>
+          <p style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--color-text-muted)', marginBottom: 8 }}>
+            {t('sources', 'Sources')}
+          </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {sources.map((s, i) => (
               <SourceCard key={i} org={s.org} dept={s.dept} label={s.label} />
@@ -113,7 +127,7 @@ export default function ChatMessage({ message, showSources = true }) {
       )}
 
       <div className="feedback-row">
-        <span>Was this helpful?</span>
+        <span>{t('wasThisHelpful', 'Was this helpful?')}</span>
         <button
           className={feedback === 'up' ? 'selected' : ''}
           onClick={() => giveFeedback('up')}
@@ -130,5 +144,5 @@ export default function ChatMessage({ message, showSources = true }) {
         </button>
       </div>
     </div>
-  )
+  );
 }

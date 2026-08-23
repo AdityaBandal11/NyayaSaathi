@@ -1,15 +1,18 @@
 import { NavLink } from 'react-router-dom'
 import { LayoutDashboard, MessageCircle, Landmark, ClipboardList, Settings } from 'lucide-react'
-
-const ITEMS = [
-  { to: '/app', label: 'Home', icon: LayoutDashboard, end: true },
-  { to: '/app/assistant', label: 'Ask AI', icon: MessageCircle },
-  { to: '/app/schemes', label: 'Schemes', icon: Landmark },
-  { to: '/app/applications', label: 'Apps', icon: ClipboardList },
-  { to: '/app/settings', label: 'Settings', icon: Settings },
-]
+import { useLanguage } from '../LanguageContext.jsx'
 
 export default function MobileNav() {
+  const { t } = useLanguage()
+
+  const ITEMS = [
+    { to: '/app', label: t('dashboard', 'Home'), icon: LayoutDashboard, end: true },
+    { to: '/app/assistant', label: t('askAI', 'Ask AI'), icon: MessageCircle },
+    { to: '/app/schemes', label: t('schemes', 'Schemes'), icon: Landmark },
+    { to: '/app/applications', label: t('applications', 'Apps'), icon: ClipboardList },
+    { to: '/app/settings', label: t('settings', 'Settings'), icon: Settings },
+  ]
+
   return (
     <nav className="mobile-nav" aria-label="Mobile navigation">
       <div className="mobile-nav-inner">

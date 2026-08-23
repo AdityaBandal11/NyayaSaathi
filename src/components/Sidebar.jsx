@@ -12,22 +12,23 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-
-const NAV_ITEMS = [
-  { to: '/app', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/app/assistant', label: 'Ask AI', icon: MessageCircle },
-  { to: '/app/schemes', label: 'Government Schemes', icon: Landmark },
-  { to: '/app/rti', label: 'RTI Assistant', icon: FileText },
-  { to: '/app/documents', label: 'My Documents', icon: FolderOpen },
-  { to: '/app/applications', label: 'My Applications', icon: ClipboardList },
-  { to: '/app/saved', label: 'Saved', icon: Bookmark },
-  { to: '/app/settings', label: 'Settings', icon: Settings },
-]
+import { useLanguage } from '../LanguageContext.jsx'
 
 export default function Sidebar({ open, onClose }) {
-  // Grab the live profile from the context
   const { profile, initials } = useProfile()
   const navigate = useNavigate()
+  const { t } = useLanguage()
+
+  const NAV_ITEMS = [
+    { to: '/app', label: t('dashboard', 'Dashboard'), icon: LayoutDashboard, end: true },
+    { to: '/app/assistant', label: t('askAI', 'Ask AI'), icon: MessageCircle },
+    { to: '/app/schemes', label: t('schemes', 'Government Schemes'), icon: Landmark },
+    { to: '/app/rti', label: t('rti', 'RTI Assistant'), icon: FileText },
+    { to: '/app/documents', label: t('documents', 'My Documents'), icon: FolderOpen },
+    { to: '/app/applications', label: t('applications', 'My Applications'), icon: ClipboardList },
+    { to: '/app/saved', label: t('saved', 'Saved'), icon: Bookmark },
+    { to: '/app/settings', label: t('settings', 'Settings'), icon: Settings },
+  ]
 
   const goToProfile = () => {
     onClose()
@@ -69,10 +70,8 @@ export default function Sidebar({ open, onClose }) {
           style={{ textAlign: 'left', cursor: 'pointer' }}
           aria-label="Open your profile"
         >
-          {/* Avatar dynamically shows initials from the live profile name */}
           <div className="avatar">{initials}</div>
           <div>
-            {/* Display the live name and live role */}
             <div className="sidebar-profile-name">{profile.name}</div>
             <div className="sidebar-profile-role">{profile.userType}</div>
           </div>

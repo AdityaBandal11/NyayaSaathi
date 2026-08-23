@@ -1,55 +1,98 @@
-import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Bot, FileText, Landmark, ListChecks, ShieldCheck } from 'lucide-react'
-import ChatMessage, { TypingRow } from '../components/ChatMessage.jsx'
-import ChatInput from '../components/ChatInput.jsx'
-import SourceCard from '../components/SourceCard.jsx'
-import { chatSuggestions, getMockResponse } from '../data/mockResponses.js'
-import { useToast } from '../components/Toast.jsx'
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Bot, FileText, Landmark, ListChecks, ShieldCheck } from 'lucide-react';
+import ChatMessage, { TypingRow } from '../components/ChatMessage.jsx';
+import ChatInput from '../components/ChatInput.jsx';
+import SourceCard from '../components/SourceCard.jsx';
+import { getMultilingualMockResponse, chatSuggestionsByLang } from '../data/aiResponses.js';
+import { useToast } from '../components/Toast.jsx';
+import { useLanguage } from '../LanguageContext.jsx';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition.js';
 
 export default function Assistant() {
-  const [messages, setMessages] = useState([])
-  const [input, setInput] = useState('')
-  const [typing, setTyping] = useState(false)
-  const scrollRef = useRef(null)
-  const prefillRef = useRef(false)
-  const location = useLocation()
-  const navigate = useNavigate()
-  const { showToast } = useToast()
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [typing, setTyping] = useState(false);
+  const scrollRef = useRef(null);
+  const prefillRef = useRef(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { language, currentLocale, t } = useLanguage();
+
+  const handleSpeechTranscript = (newTranscript) => {
+    if (newTranscript) {
+      setInput(newTranscript);
+    }
+  };
+
+  const {
+    isSupported: isSpeechSupported,
+    isListening,
+    error: speechError,
+    startListening,
+    stopListening,
+  } = useSpeechRecognition({
+    lang: currentLocale,
+    onTranscript: handleSpeechTranscript,
+  });
 
   useEffect(() => {
-    const prompt = location.state?.prompt
-    if (prompt && !prefillRef.current) {
-      setInput(prompt)
-      prefillRef.current = true
-      navigate(location.pathname, { replace: true, state: null })
+    if (speechError) {
+      showToast(speechError);
     }
-  }, [location.pathname, location.state, navigate])
+  }, [speechError, showToast]);
+
+  useEffect(() => {
+    const prompt = location.state?.prompt;
+    if (prompt && !prefillRef.current) {
+      setInput(prompt);
+      prefillRef.current = true;
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.pathname, location.state, navigate]);
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, typing])
+  }, [messages, typing]);
+
+  const toggleVoice = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      if (!isSpeechSupported) {
+        showToast(t('voiceNotSupported', 'Voice input is not supported in this browser.'));
+        return;
+      }
+      startListening();
+    }
+  };
 
   const sendMessage = (text) => {
-    const clean = text.trim()
-    if (!clean || typing) return
+    const clean = text.trim();
+    if (!clean || typing) return;
 
-    const userMsg = { role: 'user', text: clean }
-    setMessages((prev) => [...prev, userMsg])
-    setInput('')
-    setTyping(true)
+    if (isListening) {
+      stopListening();
+    }
+
+    const userMsg = { role: 'user', text: clean };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput('');
+    setTyping(true);
 
     setTimeout(() => {
-      const data = getMockResponse(clean)
-      setMessages((prev) => [...prev, { role: 'ai', data }])
-      setTyping(false)
-    }, 1200)
-  }
+      const data = getMultilingualMockResponse(clean, language);
+      setMessages((prev) => [...prev, { role: 'ai', data }]);
+      setTyping(false);
+    }, 1000);
+  };
 
-  const latestAi = [...messages].reverse().find((m) => m.role === 'ai')?.data
-  const hasStarted = messages.length > 0
+  const currentSuggestions = chatSuggestionsByLang[language] || chatSuggestionsByLang.en;
+  const latestAi = [...messages].reverse().find((m) => m.role === 'ai')?.data;
+  const hasStarted = messages.length > 0;
 
   return (
     <div className="assistant-layout">
@@ -59,22 +102,22 @@ export default function Assistant() {
             <Bot size={20} />
           </div>
           <div>
-            <h2>NyayaSaathi AI</h2>
-            <div className="sub">Your Civic Rights Assistant</div>
+            <h2>{t('assistantTitle', 'NyayaSaathi AI')}</h2>
+            <div className="sub">{t('assistantSubtitle', 'Your Civic Rights Assistant')}</div>
           </div>
           <span className="status-online">
-            <span className="dot" /> AI Online
+            <span className="dot" /> {t('online', 'AI Online')}
           </span>
         </div>
 
         <div className="chat-scroll" ref={scrollRef}>
           {!hasStarted && (
             <div className="suggestions-wrap assistant-empty-state">
-              <span className="eyebrow"><ShieldCheck size={14} /> Trusted civic guidance</span>
-              <h3>Ask in simple language.</h3>
-              <p>NyayaSaathi will turn your situation into rights, documents, next steps and sources.</p>
+              <span className="eyebrow"><ShieldCheck size={14} /> {t('trustedGuidance', 'Trusted civic guidance')}</span>
+              <h3>{t('askSimpleLanguage', 'Ask in simple language.')}</h3>
+              <p>{t('assistantEmptyDesc', 'NyayaSaathi will turn your situation into rights, documents, next steps and sources.')}</p>
               <div className="assistant-empty-prompts">
-                {chatSuggestions.slice(0, 4).map((s) => (
+                {currentSuggestions.slice(0, 4).map((s) => (
                   <button className="suggestion-chip" key={s} onClick={() => sendMessage(s)}>
                     {s}
                   </button>
@@ -92,7 +135,7 @@ export default function Assistant() {
 
         <div className="chat-input-shell">
           <div className="chat-input-suggestions" aria-label="Suggested prompts">
-            {chatSuggestions.slice(0, 3).map((s) => (
+            {currentSuggestions.slice(0, 3).map((s) => (
               <button key={s} onClick={() => sendMessage(s)} disabled={typing}>
                 {s}
               </button>
@@ -103,6 +146,9 @@ export default function Assistant() {
             onChange={setInput}
             onSend={() => sendMessage(input)}
             disabled={typing}
+            isListening={isListening}
+            onVoiceToggle={toggleVoice}
+            listeningError={speechError}
             onAttach={() => showToast('Attachment support is available in Document Explainer for this prototype.')}
           />
         </div>
@@ -111,13 +157,17 @@ export default function Assistant() {
       <aside className="assistant-context-panel" aria-label="Context and action plan">
         <div className="context-panel-header">
           <span className="eyebrow"><ListChecks size={14} /> Context</span>
-          <h3>Action Plan</h3>
+          <h3>{t('actionPlan', 'Action Plan')}</h3>
           <p>{latestAi ? 'Based on the latest AI response.' : 'Your plan will appear here after the first response.'}</p>
         </div>
 
         <div className="context-list">
-          {(latestAi?.actionPlan || ['Ask a question about your situation.', 'Review the suggested rights and next steps.', 'Use documents and official sources to continue.']).map((step, i) => (
-            <div className="context-step" key={step}>
+          {(latestAi?.actionPlan || [
+            'Ask a question about your situation.',
+            'Review the suggested rights and next steps.',
+            'Use documents and official sources to continue.'
+          ]).map((step, i) => (
+            <div className="context-step" key={i}>
               <span>{i + 1}</span>
               <p>{step}</p>
             </div>
@@ -125,7 +175,7 @@ export default function Assistant() {
         </div>
 
         <div className="context-panel-block">
-          <h4><FileText size={15} /> Documents</h4>
+          <h4><FileText size={15} /> {t('requiredDocuments', 'Documents')}</h4>
           <ul>
             {(latestAi?.documents || ['Identity proof', 'Any related notices or receipts']).map((doc) => (
               <li key={doc}>{doc}</li>
@@ -134,7 +184,7 @@ export default function Assistant() {
         </div>
 
         <div className="context-panel-block">
-          <h4><Landmark size={15} /> Sources</h4>
+          <h4><Landmark size={15} /> {t('sources', 'Sources')}</h4>
           <div className="context-sources">
             {(latestAi?.sources || [{ org: 'Government of India', dept: 'General Civic Information', label: 'Official Information' }]).map((s, i) => (
               <SourceCard key={i} org={s.org} dept={s.dept} label={s.label} />
@@ -143,5 +193,5 @@ export default function Assistant() {
         </div>
       </aside>
     </div>
-  )
+  );
 }
