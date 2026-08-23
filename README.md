@@ -191,7 +191,7 @@ Built with ❤️ for the hackathon by:
 
 
 
-**Team NyayaSaathi**
+**Team Initiators**
 
 
 
